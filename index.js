@@ -13,6 +13,14 @@ const port = process.env.PORT || 3000;
 app.use(express.json());                          // ✅ parse JSON request bodies
 app.use(express.urlencoded({ extended: true }));  // ✅ parse form data
 
+
+// ── Debug: catch bad middleware ────────────────
+app.use((req, res, next) => {
+  console.log(`📍 ${req.method} ${req.path}`);
+  next();
+});
+
+
 // ── Routes ────────────────────────────────────
 app.use("/api/auth", authRoutes);
 

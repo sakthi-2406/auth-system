@@ -29,23 +29,23 @@ const userSchema = new mongoose.Schema(
     },
 
     // Email OTP
-    emailOtp:        { type: String, select: false },
-    emailOtpExpiry:  { type: Date,   select: false },
+    emailOtp:        { type: String,  select: false },
+    emailOtpExpiry:  { type: Date,    select: false },
     isEmailVerified: { type: Boolean, default: false },
 
     // Phone OTP
-    phoneOtp:        { type: String, select: false },
-    phoneOtpExpiry:  { type: Date,   select: false },
+    phoneOtp:        { type: String,  select: false },
+    phoneOtpExpiry:  { type: Date,    select: false },
     isPhoneVerified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
-// Hash password before save
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+// ✅ CORRECT - regular function (not arrow) so 'this' works
+//             no next parameter needed with async hooks
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;   // ← just return, no next()
   this.password = await bcrypt.hash(this.password, 12);
-  next();
 });
 
 // Compare password method

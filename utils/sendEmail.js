@@ -8,14 +8,23 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// ── Test the connection on server start (optional but helpful) ──
+transporter.verify((error) => {
+  if (error) {
+    console.log("❌ Email transporter error:", error.message);
+  } else {
+    console.log("✅ Email transporter ready");
+  }
+});
+
 export const sendEmailOtp = async (to, otp) => {
   await transporter.sendMail({
     from: `"Auth System" <${process.env.EMAIL_USER}>`,
     to,
     subject: "Your Email Verification OTP",
     html: `
-      <div style="font-family:sans-serif;max-width:420px;margin:auto;padding:24px;
-                  border:1px solid #eee;border-radius:10px">
+      <div style="font-family:sans-serif;max-width:420px;margin:auto;
+                  padding:24px;border:1px solid #eee;border-radius:10px">
         <h2 style="color:#333">Verify Your Email</h2>
         <p>Use the OTP below. It expires in <strong>10 minutes</strong>.</p>
         <div style="font-size:36px;font-weight:bold;letter-spacing:10px;

@@ -7,8 +7,8 @@ const client = twilio(
 
 export const sendPhoneOtp = async (phone, otp) => {
   await client.messages.create({
-    body: `Your OTP is: ${otp}. Valid for 10 minutes. Do not share it.`,
+    body: `Your verification OTP is: ${otp}. Valid for 10 minutes. Do not share it.`,
     from: process.env.TWILIO_PHONE_NUMBER,
-    to: phone,
+    to: phone,                           // must be E.164 format → +919876543210
   });
 };

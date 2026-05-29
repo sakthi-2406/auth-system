@@ -37,6 +37,31 @@ export const register = async (req, res) => {
       userId: user._id,
     });
   } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// ─────────────────────────────────────────────────────────────
+// GET PROFILE  →  GET /api/auth/profile  (protected)
+// ─────────────────────────────────────────────────────────────
+export const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({
+      user: {
+        id:              user._id,
+        name:            user.name,
+        email:           user.email,
+        phone:           user.phone,
+        isEmailVerified: user.isEmailVerified,
+        isPhoneVerified: user.isPhoneVerified,
+        createdAt:       user.createdAt,
+      },
+    });
+  } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
